@@ -31,6 +31,7 @@ public class Bot {
 
     public Command run() {
         List<Object> blocks = getBlocksInFront(myCar.position.lane, myCar.position.block);
+        List<Object> LeftBlocks;
         if (myCar.damage >= 5) {
             return new FixCommand();
         }
@@ -60,6 +61,40 @@ public class Bot {
 
         }
         return blocks;
+    }
+
+    private List<Object> getBlocksOnLeft(int lane, int block) {
+        List<Lane[]> map = gameState.lanes;
+        List<Object> leftBlocks = new ArrayList<>();
+        int startBlock = map.get(0)[0].position.block;
+
+        Lane[] laneList = map.get(lane - 2);
+        for (int i = max(block - startBlock, 0); i <= block - startBlock + Bot.maxSpeed; i++) {
+            if (laneList[i] == null || laneList[i].terrain == Terrain.FINISH) {
+                break;
+            }
+
+            blocks.add(laneList[i].terrain);
+
+        }
+        return leftBlocks;
+    }
+
+    private List<Object> getBlocksOnRight(int lane, int block) {
+        List<Lane[]> map = gameState.lanes;
+        List<Object> rightBlocks = new ArrayList<>();
+        int startBlock = map.get(0)[0].position.block;
+
+        Lane[] laneList = map.get(lane);
+        for (int i = max(block - startBlock, 0); i <= block - startBlock + Bot.maxSpeed; i++) {
+            if (laneList[i] == null || laneList[i].terrain == Terrain.FINISH) {
+                break;
+            }
+
+            blocks.add(laneList[i].terrain);
+
+        }
+        return rightBlocks;
     }
 
 }
