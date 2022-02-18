@@ -94,8 +94,58 @@ public class Bot {
                                             return EMP;
                                             /* Jika punya Tweet, prediksi posisi musuh dan letakkan CyberTruck */
                                         } else if (hasPowerUp(PowerUps.TWEET, myCar.powerups)) {
-                                            //prediksi posisi musuh selanjutnya
-                                            //return TWEET;
+                                            List<Lane> enemyFrontBlocks = getBlocksInFront(opponent.position.lane, opponent.position.block, gameState);
+                                            int enemyFrontSpeedReduction;
+                                            int enemyLeftSpeedReduction;
+                                            int enemyRightSpeedReduction;
+
+                                            enemyFrontSpeedReduction = countSpeedReduction(enemyFrontBlocks, opponent.speed);
+                                            if (opponent.position.lane > 1) {
+                                                List<Lane> enemyLeftBlocks = getBlocksOnLeft(opponent.position.lane, opponent.position.block, gameState);
+                                                enemyLeftSpeedReduction = countSpeedReduction(enemyLeftBlocks, opponent.speed);
+                                            } else {
+                                                List<Lane> enemyLeftBlocks = new ArrayList<>();
+                                                enemyLeftSpeedReduction = 99;
+                                            }
+                                            if (opponent.position.lane < 4) {
+                                                List<Lane> enemyRightBlocks = getBlocksOnRight(opponent.position.lane, opponent.position.block, gameState);
+                                                enemyRightSpeedReduction = countSpeedReduction(enemyRightBlocks, opponent.speed);
+                                            } else {
+                                                List<Lane> enemyRightBlocks = new ArrayList<>();
+                                                enemyRightSpeedReduction = 99;
+                                            }
+
+                                            if (enemyFrontSpeedReduction <= enemyLeftSpeedReduction || enemyFrontSpeedReduction <= enemyRightSpeedReduction) {
+                                                int placeLane = opponent.position.lane;
+                                                int placeBlock = opponent.position.block + 1;
+                                                return new TweetCommand(placeLane, placeBlock);
+                                                /* Jika speed reduction di kiri atau kanan lebih rendah */
+                                            } else {
+                                                /* Jika leftSpeedReduction lebih rendah, belok kiri, belok kiri */
+                                                if (enemyLeftSpeedReduction < enemyRightSpeedReduction) {
+                                                    int placeLane = opponent.position.lane - 1;
+                                                    int placeBlock = opponent.position.block + 1;
+                                                    return new TweetCommand(placeLane, placeBlock);
+                                                    /* Jika speed reduction di kanan lebih rendah dari kiri, belok kanan */
+                                                } else if (leftSpeedReduction > rightSpeedReduction) {
+                                                    int placeLane = opponent.position.lane + 1;
+                                                    int placeBlock = opponent.position.block + 1;
+                                                    return new TweetCommand(placeLane, placeBlock);
+                                                    /* Jika speed reduction di kanan sama dengan speed reduction di kiri, random antara kiri dan kanan */
+                                                } else {
+                                                    Random rand1 = new Random();
+                                                    int x1 = rand1.nextInt(2);
+                                                    if (x1 == 0) {
+                                                        int placeLane = opponent.position.lane - 1;
+                                                        int placeBlock = opponent.position.block + 1;
+                                                        return new TweetCommand(placeLane, placeBlock);
+                                                    } else {
+                                                        int placeLane = opponent.position.lane + 1;
+                                                        int placeBlock = opponent.position.block + 1;
+                                                        return new TweetCommand(placeLane, placeBlock);
+                                                    }
+                                                }
+                                            }
                                             /* Jika tidak punya EMP ataupun Tweet */
                                         } else {
                                             return DO_NOTHING;
@@ -132,8 +182,58 @@ public class Bot {
                                         return EMP;
                                         /* Jika punya Tweet, prediksi posisi musuh dan letakkan CyberTruck */
                                     } else if (hasPowerUp(PowerUps.TWEET, myCar.powerups)) {
-                                        //prediksi posisi musuh selanjutnya
-                                        //return TWEET
+                                        List<Lane> enemyFrontBlocks = getBlocksInFront(opponent.position.lane, opponent.position.block, gameState);
+                                        int enemyFrontSpeedReduction;
+                                        int enemyLeftSpeedReduction;
+                                        int enemyRightSpeedReduction;
+
+                                        enemyFrontSpeedReduction = countSpeedReduction(enemyFrontBlocks, opponent.speed);
+                                        if (opponent.position.lane > 1) {
+                                            List<Lane> enemyLeftBlocks = getBlocksOnLeft(opponent.position.lane, opponent.position.block, gameState);
+                                            enemyLeftSpeedReduction = countSpeedReduction(enemyLeftBlocks, opponent.speed);
+                                        } else {
+                                            List<Lane> enemyLeftBlocks = new ArrayList<>();
+                                            enemyLeftSpeedReduction = 99;
+                                        }
+                                        if (opponent.position.lane < 4) {
+                                            List<Lane> enemyRightBlocks = getBlocksOnRight(opponent.position.lane, opponent.position.block, gameState);
+                                            enemyRightSpeedReduction = countSpeedReduction(enemyRightBlocks, opponent.speed);
+                                        } else {
+                                            List<Lane> enemyRightBlocks = new ArrayList<>();
+                                            enemyRightSpeedReduction = 99;
+                                        }
+
+                                        if (enemyFrontSpeedReduction <= enemyLeftSpeedReduction || enemyFrontSpeedReduction <= enemyRightSpeedReduction) {
+                                            int placeLane = opponent.position.lane;
+                                            int placeBlock = opponent.position.block + 1;
+                                            return new TweetCommand(placeLane, placeBlock);
+                                            /* Jika speed reduction di kiri atau kanan lebih rendah */
+                                        } else {
+                                            /* Jika leftSpeedReduction lebih rendah, belok kiri */
+                                            if (enemyLeftSpeedReduction < enemyRightSpeedReduction) {
+                                                int placeLane = opponent.position.lane - 1;
+                                                int placeBlock = opponent.position.block + 1;
+                                                return new TweetCommand(placeLane, placeBlock);
+                                                /* Jika speed reduction di kanan lebih rendah dari kiri, belok kanan */
+                                            } else if (leftSpeedReduction > rightSpeedReduction) {
+                                                int placeLane = opponent.position.lane + 1;
+                                                int placeBlock = opponent.position.block + 1;
+                                                return new TweetCommand(placeLane, placeBlock);
+                                                /* Jika speed reduction di kanan sama dengan speed reduction di kiri, random antara kiri dan kanan */
+                                            } else {
+                                                Random rand1 = new Random();
+                                                int x1 = rand1.nextInt(2);
+                                                if (x1 == 0) {
+                                                    int placeLane = opponent.position.lane - 1;
+                                                    int placeBlock = opponent.position.block + 1;
+                                                    return new TweetCommand(placeLane, placeBlock);
+                                                } else {
+                                                    int placeLane = opponent.position.lane + 1;
+                                                    int placeBlock = opponent.position.block + 1;
+                                                    return new TweetCommand(placeLane, placeBlock);
+                                                }
+                                            }
+                                        }
                                         /* Jika tidak punya EMP ataupun Tweet */
                                     } else {
                                         return DO_NOTHING;
@@ -161,15 +261,15 @@ public class Bot {
                         /* Jika frontSpeedReduction paling rendah */
                         if (frontSpeedReduction <= leftSpeedReduction || frontSpeedReduction <= rightSpeedReduction) {
                             return ACCELERATE;
-                        /* Jika speed reduction di kiri atau kanan lebih rendah */
+                            /* Jika speed reduction di kiri atau kanan lebih rendah */
                         } else {
                             /* Jika leftSpeedReduction lebih rendah, belok kiri, belok kiri */
                             if (leftSpeedReduction < rightSpeedReduction) {
                                 return TURN_LEFT;
-                            /* Jika speed reduction di kanan lebih rendah dari kiri, belok kanan */
+                                /* Jika speed reduction di kanan lebih rendah dari kiri, belok kanan */
                             } else if (leftSpeedReduction > rightSpeedReduction) {
                                 return TURN_RIGHT;
-                            /* Jika speed reduction di kanan sama dengan speed reduction di kiri, random antara kiri dan kanan */
+                                /* Jika speed reduction di kanan sama dengan speed reduction di kiri, random antara kiri dan kanan */
                             } else {
                                 Random rand1 = new Random();
                                 int x1 = rand1.nextInt(2);
@@ -180,69 +280,218 @@ public class Bot {
                                 }
                             }
                         }
-                    /* Jika speed sudah maksimum */
+                        /* Jika speed sudah maksimum */
                     } else {
+                        if (frontSpeedReduction <= leftSpeedReduction || frontSpeedReduction <= rightSpeedReduction) {
+                            /* Jika musuh terlihat di map */
+                            if (opponent.position.block > myCar.position.block - 6 && opponent.position.block < myCar.position.block + 21) {
+                                /* Jika musuh ada di depan player */
+                                if (opponent.position.block > myCar.position.block) {
+                                    /* Jika punya EMP, tembak EMP */
+                                    if (hasPowerUp(PowerUps.EMP, myCar.powerups)) {
+                                        return EMP;
+                                        /* Jika punya Tweet, prediksi posisi musuh dan letakkan CyberTruck */
+                                    } else if (hasPowerUp(PowerUps.TWEET, myCar.powerups)) {
+                                        List<Lane> enemyFrontBlocks = getBlocksInFront(opponent.position.lane, opponent.position.block, gameState);
+                                        int enemyFrontSpeedReduction;
+                                        int enemyLeftSpeedReduction;
+                                        int enemyRightSpeedReduction;
 
-                        if (leftSpeedReduction == 0 && rightSpeedReduction == 0) {
-                            Random rand2 = new Random();
-                            int x2 = rand2.nextInt(2);
-                            if (x2 == 0) {
-                                return TURN_LEFT;
-                            } else {
-                                return TURN_RIGHT;
-                            }
-                        } else if (leftSpeedReduction > 0 && rightSpeedReduction == 0) {
-                            return TURN_RIGHT;
-                        } else if (leftSpeedReduction == 0 && rightSpeedReduction > 0) {
-                            return TURN_LEFT;
-                        } else {
-                            if (hasPowerUp(PowerUps.LIZARD, myCar.powerups)) {
-                                return LIZARD;
-                            } else {
-                                if (frontSpeedReduction < leftSpeedReduction || frontSpeedReduction < rightSpeedReduction) {
-                                    /* Jika musuh terlihat di map */
-                                    if (opponent.position.block > myCar.position.block - 6 && opponent.position.block < myCar.position.block + 21) {
-                                        /* Jika musuh ada di depan player */
-                                        if (opponent.position.block > myCar.position.block) {
-                                            /* Jika punya EMP, tembak EMP */
-                                            if (hasPowerUp(PowerUps.EMP, myCar.powerups)) {
-                                                return EMP;
-                                                /* Jika punya Tweet, prediksi posisi musuh dan letakkan CyberTruck */
-                                            } else if (hasPowerUp(PowerUps.TWEET, myCar.powerups)) {
-                                                //prediksi posisi musuh selanjutnya
-                                                //return TWEET
-                                                /* Jika tidak punya EMP ataupun Tweet */
+                                        enemyFrontSpeedReduction = countSpeedReduction(enemyFrontBlocks, opponent.speed);
+                                        if (opponent.position.lane > 1) {
+                                            List<Lane> enemyLeftBlocks = getBlocksOnLeft(opponent.position.lane, opponent.position.block, gameState);
+                                            enemyLeftSpeedReduction = countSpeedReduction(enemyLeftBlocks, opponent.speed);
+                                        } else {
+                                            List<Lane> enemyLeftBlocks = new ArrayList<>();
+                                            enemyLeftSpeedReduction = 99;
+                                        }
+                                        if (opponent.position.lane < 4) {
+                                            List<Lane> enemyRightBlocks = getBlocksOnRight(opponent.position.lane, opponent.position.block, gameState);
+                                            enemyRightSpeedReduction = countSpeedReduction(enemyRightBlocks, opponent.speed);
+                                        } else {
+                                            List<Lane> enemyRightBlocks = new ArrayList<>();
+                                            enemyRightSpeedReduction = 99;
+                                        }
+
+                                        if (enemyFrontSpeedReduction <= enemyLeftSpeedReduction || enemyFrontSpeedReduction <= enemyRightSpeedReduction) {
+                                            int placeLane = opponent.position.lane;
+                                            int placeBlock = opponent.position.block + 1;
+                                            return new TweetCommand(placeLane, placeBlock);
+                                            /* Jika speed reduction di kiri atau kanan lebih rendah */
+                                        } else {
+                                            /* Jika leftSpeedReduction lebih rendah, belok kiri, belok kiri */
+                                            if (enemyLeftSpeedReduction < enemyRightSpeedReduction) {
+                                                int placeLane = opponent.position.lane - 1;
+                                                int placeBlock = opponent.position.block + 1;
+                                                return new TweetCommand(placeLane, placeBlock);
+                                                /* Jika speed reduction di kanan lebih rendah dari kiri, belok kanan */
+                                            } else if (leftSpeedReduction > rightSpeedReduction) {
+                                                int placeLane = opponent.position.lane + 1;
+                                                int placeBlock = opponent.position.block + 1;
+                                                return new TweetCommand(placeLane, placeBlock);
+                                                /* Jika speed reduction di kanan sama dengan speed reduction di kiri, random antara kiri dan kanan */
                                             } else {
-                                                return DO_NOTHING;
+                                                Random rand1 = new Random();
+                                                int x1 = rand1.nextInt(2);
+                                                if (x1 == 0) {
+                                                    int placeLane = opponent.position.lane - 1;
+                                                    int placeBlock = opponent.position.block + 1;
+                                                    return new TweetCommand(placeLane, placeBlock);
+                                                } else {
+                                                    int placeLane = opponent.position.lane + 1;
+                                                    int placeBlock = opponent.position.block + 1;
+                                                    return new TweetCommand(placeLane, placeBlock);
+                                                }
                                             }
-                                            /* Jika musuh ada di belakang player */
-                                        } else {
-                                            return DO_NOTHING;
                                         }
-                                        /* Jika musuh tidak terlihat di map */
+                                        /* Jika tidak punya EMP ataupun Tweet */
                                     } else {
-                                        /* Jika musuh ada di belakang player dan player punya Oil, gunakan oil */
-                                        if (opponent.position.block < myCar.position.block && hasPowerUp(PowerUps.OIL, myCar.powerups)) {
-                                            return OIL;
-                                            /* Jika musuh ada di depan player atau player tidak punya Oil */
-                                        } else {
-                                            return DO_NOTHING;
-                                        }
+                                        return DO_NOTHING;
                                     }
+                                    /* Jika musuh ada di belakang player */
                                 } else {
-                                    if (leftSpeedReduction < rightSpeedReduction) {
-                                        return TURN_LEFT;
-                                    } else if (leftSpeedReduction > rightSpeedReduction) {
-                                        return TURN_RIGHT;
-                                    } else {
-                                        Random rand3 = new Random();
-                                        int x3 = rand3.nextInt(2);
-                                        if (x3 == 0) {
-                                            return TURN_LEFT;
+                                    return DO_NOTHING;
+                                }
+                                /* Jika musuh tidak terlihat di map */
+                            } else {
+                                /* Jika musuh ada di belakang player dan player punya Oil, gunakan oil */
+                                if (opponent.position.block < myCar.position.block && hasPowerUp(PowerUps.OIL, myCar.powerups)) {
+                                    return OIL;
+                                    /* Jika musuh ada di depan player atau player tidak punya Oil */
+                                } else {
+                                    return DO_NOTHING;
+                                }
+                            }
+                            /* Jika speed reduction di kiri atau kanan lebih rendah */
+                        } else {
+                            /* Jika leftSpeedReduction lebih rendah, belok kiri, belok kiri */
+                            if (leftSpeedReduction < rightSpeedReduction) {
+                                return TURN_LEFT;
+                                /* Jika speed reduction di kanan lebih rendah dari kiri, belok kanan */
+                            } else if (leftSpeedReduction > rightSpeedReduction) {
+                                return TURN_RIGHT;
+                                /* Jika speed reduction di kanan sama dengan speed reduction di kiri, random antara kiri dan kanan */
+                            } else {
+                                Random rand1 = new Random();
+                                int x1 = rand1.nextInt(2);
+                                if (x1 == 0) {
+                                    return TURN_LEFT;
+                                } else {
+                                    return TURN_RIGHT;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (leftSpeedReduction == 0 && rightSpeedReduction == 0) {
+                    Random rand2 = new Random();
+                    int x2 = rand2.nextInt(2);
+                    if (x2 == 0) {
+                        return TURN_LEFT;
+                    } else {
+                        return TURN_RIGHT;
+                    }
+                } else if (leftSpeedReduction > 0 && rightSpeedReduction == 0) {
+                    return TURN_RIGHT;
+                } else if (leftSpeedReduction == 0 && rightSpeedReduction > 0) {
+                    return TURN_LEFT;
+                } else {
+                    if (hasPowerUp(PowerUps.LIZARD, myCar.powerups)) {
+                        return LIZARD;
+                    } else {
+                        if (frontSpeedReduction < leftSpeedReduction || frontSpeedReduction < rightSpeedReduction) {
+                            /* Jika musuh terlihat di map */
+                            if (opponent.position.block > myCar.position.block - 6 && opponent.position.block < myCar.position.block + 21) {
+                                /* Jika musuh ada di depan player */
+                                if (opponent.position.block > myCar.position.block) {
+                                    /* Jika punya EMP, tembak EMP */
+                                    if (hasPowerUp(PowerUps.EMP, myCar.powerups)) {
+                                        return EMP;
+                                        /* Jika punya Tweet, prediksi posisi musuh dan letakkan CyberTruck */
+                                    } else if (hasPowerUp(PowerUps.TWEET, myCar.powerups)) {
+                                        List<Lane> enemyFrontBlocks = getBlocksInFront(opponent.position.lane, opponent.position.block, gameState);
+                                        int enemyFrontSpeedReduction;
+                                        int enemyLeftSpeedReduction;
+                                        int enemyRightSpeedReduction;
+
+                                        enemyFrontSpeedReduction = countSpeedReduction(enemyFrontBlocks, opponent.speed);
+                                        if (opponent.position.lane > 1) {
+                                            List<Lane> enemyLeftBlocks = getBlocksOnLeft(opponent.position.lane, opponent.position.block, gameState);
+                                            enemyLeftSpeedReduction = countSpeedReduction(enemyLeftBlocks, opponent.speed);
                                         } else {
-                                            return TURN_RIGHT;
+                                            List<Lane> enemyLeftBlocks = new ArrayList<>();
+                                            enemyLeftSpeedReduction = 99;
                                         }
+                                        if (opponent.position.lane < 4) {
+                                            List<Lane> enemyRightBlocks = getBlocksOnRight(opponent.position.lane, opponent.position.block, gameState);
+                                            enemyRightSpeedReduction = countSpeedReduction(enemyRightBlocks, opponent.speed);
+                                        } else {
+                                            List<Lane> enemyRightBlocks = new ArrayList<>();
+                                            enemyRightSpeedReduction = 99;
+                                        }
+
+                                        if (enemyFrontSpeedReduction <= enemyLeftSpeedReduction || enemyFrontSpeedReduction <= enemyRightSpeedReduction) {
+                                            int placeLane = opponent.position.lane;
+                                            int placeBlock = opponent.position.block + 1;
+                                            return new TweetCommand(placeLane, placeBlock);
+                                            /* Jika speed reduction di kiri atau kanan lebih rendah */
+                                        } else {
+                                            /* Jika leftSpeedReduction lebih rendah, belok kiri, belok kiri */
+                                            if (enemyLeftSpeedReduction < enemyRightSpeedReduction) {
+                                                int placeLane = opponent.position.lane - 1;
+                                                int placeBlock = opponent.position.block + 1;
+                                                return new TweetCommand(placeLane, placeBlock);
+                                                /* Jika speed reduction di kanan lebih rendah dari kiri, belok kanan */
+                                            } else if (leftSpeedReduction > rightSpeedReduction) {
+                                                int placeLane = opponent.position.lane + 1;
+                                                int placeBlock = opponent.position.block + 1;
+                                                return new TweetCommand(placeLane, placeBlock);
+                                                /* Jika speed reduction di kanan sama dengan speed reduction di kiri, random antara kiri dan kanan */
+                                            } else {
+                                                Random rand1 = new Random();
+                                                int x1 = rand1.nextInt(2);
+                                                if (x1 == 0) {
+                                                    int placeLane = opponent.position.lane - 1;
+                                                    int placeBlock = opponent.position.block + 1;
+                                                    return new TweetCommand(placeLane, placeBlock);
+                                                } else {
+                                                    int placeLane = opponent.position.lane + 1;
+                                                    int placeBlock = opponent.position.block + 1;
+                                                    return new TweetCommand(placeLane, placeBlock);
+                                                }
+                                            }
+                                        }
+                                        /* Jika tidak punya EMP ataupun Tweet */
+                                    } else {
+                                        return DO_NOTHING;
                                     }
+                                    /* Jika musuh ada di belakang player */
+                                } else {
+                                    return DO_NOTHING;
+                                }
+                                /* Jika musuh tidak terlihat di map */
+                            } else {
+                                /* Jika musuh ada di belakang player dan player punya Oil, gunakan oil */
+                                if (opponent.position.block < myCar.position.block && hasPowerUp(PowerUps.OIL, myCar.powerups)) {
+                                    return OIL;
+                                    /* Jika musuh ada di depan player atau player tidak punya Oil */
+                                } else {
+                                    return DO_NOTHING;
+                                }
+                            }
+                        } else {
+                            if (leftSpeedReduction < rightSpeedReduction) {
+                                return TURN_LEFT;
+                            } else if (leftSpeedReduction > rightSpeedReduction) {
+                                return TURN_RIGHT;
+                            } else {
+                                Random rand3 = new Random();
+                                int x3 = rand3.nextInt(2);
+                                if (x3 == 0) {
+                                    return TURN_LEFT;
+                                } else {
+                                    return TURN_RIGHT;
                                 }
                             }
                         }
@@ -250,7 +499,7 @@ public class Bot {
                 }
             }
         }
-        return ACCELERATE;
+        //return DO_NOTHING;
     }
 
     private Boolean hasPowerUp(PowerUps powerUpToCheck, PowerUps[] available) {
@@ -269,9 +518,10 @@ public class Bot {
     private List<Lane> getBlocksInFront(int lane, int block, GameState gameState) {
         List<Lane[]> map = gameState.lanes;
         List<Lane> blocks = new ArrayList<>();
+        int startBlock1 = map.get(0)[0].position.block;
 
-        Lane[] laneList = map.get(lane);
-        for (int i = block + 1; i <= block + 16; i++) {
+        Lane[] laneList = map.get(lane - 1);
+        for (int i = block - startBlock1 + 1; i <= block - startBlock1 + 16; i++) {
             if (laneList[i] == null || laneList[i].terrain == Terrain.FINISH) {
                 break;
             }
@@ -284,9 +534,10 @@ public class Bot {
     private List<Lane> getBlocksOnLeft(int lane, int block, GameState gameState) {
         List<Lane[]> map = gameState.lanes;
         List<Lane> blocks = new ArrayList<>();
+        int startBlock2 = map.get(0)[0].position.block;
 
-        Lane[] laneList = map.get(lane - 1);
-        for (int j = block; j <= block + 15; j++) {
+        Lane[] laneList = map.get(lane - 2);
+        for (int j = block - startBlock2; j <= block - startBlock2 + 15; j++) {
             if (laneList[j] == null || laneList[j].terrain == Terrain.FINISH) {
                 break;
             }
@@ -299,9 +550,10 @@ public class Bot {
     private List<Lane> getBlocksOnRight(int lane, int block, GameState gameState) {
         List<Lane[]> map = gameState.lanes;
         List<Lane> blocks = new ArrayList<>();
+        int startBlock3 = map.get(0)[0].position.block;
 
-        Lane[] laneList = map.get(lane + 1);
-        for (int k = block; k <= block + 15; k++) {
+        Lane[] laneList = map.get(lane);
+        for (int k = block - startBlock3; k <= block - startBlock3 + 15; k++) {
             if (laneList[k] == null || laneList[k].terrain == Terrain.FINISH) {
                 break;
             }
@@ -338,7 +590,11 @@ public class Bot {
 
     private int countSpeedReduction(List<Lane> blocks, int maxSpeed) {
         int total = 0;
-        for (int l = 0; l < maxSpeed; l++) {
+        int tempMaxSpeed = maxSpeed;
+        if (maxSpeed > blocks.size()) {
+            tempMaxSpeed = blocks.size();
+        }
+        for (int l = 0; l < tempMaxSpeed; l++) {
             if (blocks.get(l).terrain == Terrain.MUD || blocks.get(l).terrain == Terrain.OIL_SPILL) {
                 total += 1;
             } else if (blocks.get(l).terrain == Terrain.WALL || blocks.get(l).isOccupiedByCyberTruck) {
