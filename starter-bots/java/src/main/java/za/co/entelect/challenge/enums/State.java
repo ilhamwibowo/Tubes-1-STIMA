@@ -17,12 +17,6 @@ public enum State {
     HIT_MUD,
     @SerializedName("HIT_OIL")
     HIT_OIL,
-    @SerializedName("HIT_WALL")
-    HIT_WALL,
-    @SerializedName("HIT_CYBER_TRUCK")
-    HIT_CYBER_TRUCK,
-    @SerializedName("HIT_EMP")
-    HIT_EMP,
     @SerializedName("DECELERATING")
     DECELERATING,
     @SerializedName("PICKED_UP_POWERUP")
@@ -35,8 +29,10 @@ public enum State {
     USED_LIZARD,
     @SerializedName("USED_TWEET")
     USED_TWEET,
-    @SerializedName("USED_EMP")
-    USED_EMP,
+    @SerializedName("HIT_WALL")
+    HIT_WALL,
+    @SerializedName("HIT_CYBER_TRUCK")
+    HIT_CYBER_TRUCK,
     @SerializedName("FINISHED")
     FINISHED
 }

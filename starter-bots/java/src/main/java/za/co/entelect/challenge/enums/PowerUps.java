@@ -6,11 +6,12 @@ public enum PowerUps {
     @SerializedName("BOOST")
     BOOST,
     @SerializedName("OIL")
-    OIL
-    @SerializedName("EMP")
-    EMP,
+    OIL,
+    @SerializedName("TWEET")
+    TWEET,
     @SerializedName("LIZARD")
     LIZARD,
-    @SerializedName("TWEET")
-    TWEET
+    @SerializedName("EMP")
+    EMP;
+
 }
