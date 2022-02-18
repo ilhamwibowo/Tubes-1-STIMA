@@ -269,9 +269,10 @@ public class Bot {
     private List<Lane> getBlocksInFront(int lane, int block, GameState gameState) {
         List<Lane[]> map = gameState.lanes;
         List<Lane> blocks = new ArrayList<>();
+        int startBlock1 = map.get(0)[0].position.block;
 
-        Lane[] laneList = map.get(lane);
-        for (int i = block + 1; i <= block + 16; i++) {
+        Lane[] laneList = map.get(lane - 1);
+        for (int i = block - startBlock1 + 1; i <= block - startBlock1 + 16; i++) {
             if (laneList[i] == null || laneList[i].terrain == Terrain.FINISH) {
                 break;
             }
@@ -284,9 +285,10 @@ public class Bot {
     private List<Lane> getBlocksOnLeft(int lane, int block, GameState gameState) {
         List<Lane[]> map = gameState.lanes;
         List<Lane> blocks = new ArrayList<>();
+        int startBlock2 = map.get(0)[0].position.block;
 
-        Lane[] laneList = map.get(lane - 1);
-        for (int j = block; j <= block + 15; j++) {
+        Lane[] laneList = map.get(lane - 2);
+        for (int j = block - startBlock2; j <= block - startBlock2 + 15; j++) {
             if (laneList[j] == null || laneList[j].terrain == Terrain.FINISH) {
                 break;
             }
@@ -299,9 +301,10 @@ public class Bot {
     private List<Lane> getBlocksOnRight(int lane, int block, GameState gameState) {
         List<Lane[]> map = gameState.lanes;
         List<Lane> blocks = new ArrayList<>();
+        int startBlock3 = map.get(0)[0].position.block;
 
-        Lane[] laneList = map.get(lane + 1);
-        for (int k = block; k <= block + 15; k++) {
+        Lane[] laneList = map.get(lane);
+        for (int k = block - startBlock3; k <= block - startBlock3 + 15; k++) {
             if (laneList[k] == null || laneList[k].terrain == Terrain.FINISH) {
                 break;
             }
@@ -338,7 +341,11 @@ public class Bot {
 
     private int countSpeedReduction(List<Lane> blocks, int maxSpeed) {
         int total = 0;
-        for (int l = 0; l < maxSpeed; l++) {
+        int tempMaxSpeed = maxSpeed;
+        if (maxSpeed > blocks.size()) {
+            tempMaxSpeed = blocks.size();
+        }
+        for (int l = 0; l < tempMaxSpeed; l++) {
             if (blocks.get(l).terrain == Terrain.MUD || blocks.get(l).terrain == Terrain.OIL_SPILL) {
                 total += 1;
             } else if (blocks.get(l).terrain == Terrain.WALL || blocks.get(l).isOccupiedByCyberTruck) {
